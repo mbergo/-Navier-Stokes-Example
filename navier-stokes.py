@@ -1,34 +1,53 @@
-i# Importar bibliotecas necessárias
+# Import necessary libraries
 import numpy as np
 
-# Função para calcular o campo de velocidades
-def calcular_velocidades(densidade, viscosidade, comprimento, pressao_gradiente):
-    # Definir parâmetros
-    num_pontos = 10  # Número de pontos no tubo
-    delta_x = comprimento / (num_pontos - 1)  # Espaçamento entre os pontos
+# Function to calculate the velocity field
+def calculate_velocities(density, viscosity, length, pressure_gradient):
+    # Define parameters
+    num_points = 10  # Number of points in the tube
+    delta_x = length / (num_points - 1)  # Spacing between points
 
-    # Inicializar matriz de velocidades
-    velocidades = np.zeros(num_pontos)
+    # Initialize velocity array
+    velocities = np.zeros(num_points)
 
-    # Calcular velocidades em cada ponto
-    for i in range(num_pontos):
-        # Calcular velocidade no ponto i usando a equação de Navier-Stokes
-        velocidade = (pressao_gradiente * i * delta_x) / (2 * densidade * viscosidade)
-        velocidades[i] = velocidade
+    # Calculate velocities at each point
+    for i in range(num_points):
+        # Calculate fluid density
+        fluid_density = calculate_density(i)
 
-    return velocidades
+        # Calculate fluid viscosity
+        fluid_viscosity = calculate_viscosity(i)
 
-# Inputs necessários:
-densidade_fluido = 1.2  # Densidade do fluido (por exemplo, ar)
-viscosidade_fluido = 0.001  # Viscosidade do fluido (por exemplo, ar)
-comprimento_tubo = 1.0  # Comprimento do tubo em metros
-gradiente_pressao = 10.0  # Gradiente de pressão aplicado ao longo do tubo
+        # Calculate velocity at point i using the Navier-Stokes equation
+        delta_p = pressure_gradient * i * delta_x
+        numerator = delta_p
+        denominator = 2 * fluid_density * fluid_viscosity
+        velocity = numerator / denominator
+        velocities[i] = velocity
 
-# Calcular o campo de velocidades
-campo_velocidades = calcular_velocidades(densidade_fluido, viscosidade_fluido, comprimento_tubo, gradiente_pressao)
+    return velocities
 
-# Imprimir resultados
-print("Campo de Velocidades:")
-for i, velocidade in enumerate(campo_velocidades):
-    print("Ponto", i, ":", velocidade, "m/s")
+# Function to calculate fluid density
+def calculate_density(i):
+    # Simple example: constant density
+    constant_density = 1.2  # Constant fluid density (e.g., air)
+    return constant_density
+
+# Function to calculate fluid viscosity
+def calculate_viscosity(i):
+    # Simple example: constant viscosity
+    constant_viscosity = 0.001  # Constant fluid viscosity (e.g., air)
+    return constant_viscosity
+
+# Inputs required:
+tube_length = 1.0  # Length of the tube in meters
+pressure_gradient = 10.0  # Pressure gradient applied along the tube
+
+# Calculate the velocity field
+velocity_field = calculate_velocities(tube_length, pressure_gradient)
+
+# Print results
+print("Velocity Field:")
+for i, velocity in enumerate(velocity_field):
+    print("Point", i, ":", velocity, "m/s")
 
